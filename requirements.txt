@@ -1,0 +1,7 @@
+langchain-groq==0.1.5
+langchain_community==0.2.5
+tiktoken==0.7.0
+langchainhub==0.1.20
+langchain==0.2.5
+langgraph==0.0.69
+tavily-python==0.3.3
