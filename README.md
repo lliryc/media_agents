@@ -1,6 +1,6 @@
 # Media Agents
 
-This repository contains a project that processes court opinions to determine their newsworthiness based on several criteria. The project leverages the `langchain_openai` library to interact with the OpenAI API.
+This repository contains a project that processes court opinions to determine their newsworthiness based on several criteria. 
 
 ## Table of Contents
 
