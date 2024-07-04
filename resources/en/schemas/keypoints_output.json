@@ -1,0 +1,24 @@
+{
+  "type": "array",
+  "description": "Schema of key points of the document",
+  "items": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string",
+        "description": "Key point text"
+      },
+      "start_pos": {
+        "type": "integer",
+        "description": "Start position of the text excerpt in the original document that corresponds to the key point"
+      },
+      "end_pos": {
+        "type": "integer",
+        "description": "End position of the text excerpt in the original document that corresponds to the key point"
+      }
+    },
+    "required": [
+      "text", "start_pos", "end_pos"
+    ]
+  }
+}

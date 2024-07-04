@@ -1,0 +1,94 @@
+{
+  "type": "object",
+  "description": "Schema of newsworthiness",
+  "properties": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "id",
+        "description": "Court opinion id",
+        "pattern": "^[0-9]{7}$"
+      },
+      "newsworthy": {
+        "type": "string",
+        "enum": [
+          "True",
+          "False"
+        ],
+        "description": "Is a court opinion newsworthy?"
+      },
+      "reason": {
+        "type": "string",
+        "description": "Text explanation why a court opinion fits for the news"
+      },
+      "influence": {
+        "type": "string",
+        "enum": [
+          "Global",
+          "Local",
+          "UNKNOWN"
+        ],
+        "description": "Does this court opinion have a global influence or only local? If it is not possible to decide using your knowledge, return UNKNOWN"
+      },
+      "country": {
+        "type": "string",
+        "description": "Proper name of a country where the facts mentioned in a court opinion took place. If it is not possible to set a country, return UNKNOWN"
+      },
+      "city": {
+        "type": "string",
+        "description": "Proper name of a city where the facts mentioned in a court opinion took place. If it is not possible to set a city, return UNKNOWN"
+      },
+      "events": {
+        "type": "array",
+        "description": "Proper names of events mentioned. If you don't find it in the content, output []",
+        "items": {
+          "type": "string"
+        }
+      },
+      "people": {
+        "type": "array",
+        "description": "Proper names of people mentioned (must consist of a first name followed by a last name). If you don't find it in the content, output []",
+        "items": {
+          "type": "string"
+        }
+      },
+      "organizations": {
+        "type": "array",
+        "description": "Proper names of organizations mentioned. If you don't find it in the content, output []",
+        "items": {
+          "type": "string"
+        }
+      },
+      "labels": {
+        "type": "array",
+        "description": "Themes of a content with a high confidence. If you don't find it in the content, output []",
+        "items": {
+          "type": "string",
+          "description": "Category of label",
+          "enum": [
+            "politics",
+            "international affairs",
+            "economy",
+            "crime",
+            "disaster",
+            "weather",
+            "arts",
+            "sports",
+            "entertainment",
+            "life style",
+            "science",
+            "technology",
+            "other"
+          ]
+        }
+      }
+    },
+    "required": [
+      "id",
+      "newsworthy",
+      "reason",
+      "influence",
+      "labels"
+    ]
+  }
+}

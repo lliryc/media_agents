@@ -16,7 +16,7 @@ class GraphState(TypedDict):
         summary: summary for the article
     """
     initial_opinion : str
-    news_story_score : int
+    news_story_criteria_score : List[int]
     news_story_labels : List[str]
     news_story_key_facts: List[str]
     summary: str

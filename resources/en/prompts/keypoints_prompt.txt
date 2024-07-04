@@ -1,0 +1,2 @@
+List key points of a court opinion.
+Fill the json output aligned to `Schema` provided below. The json output must be wrapped by "```json" and end with "```"
