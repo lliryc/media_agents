@@ -7,7 +7,7 @@ from media_agents.app_resources import get_resource_content
 from functools import cache
 import logging
 from typing import Dict
-import config
+import media_agents.config
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -98,7 +98,7 @@ def find_news_leads(state: Dict) -> Dict:
     newsworthy_opinions = []
     parser = JsonOutputParser()
     sys_intro = get_resource_content('prompts/newsworthiness_prompt.txt')
-    sys_schema = get_resource_content('prompts/keypoints_prompt.txt')
+    sys_schema = get_resource_content('schemas/newsworthiness_output.json')
     sys_message = compose_sys_content(sys_intro, sys_schema)
 
     for opinion in opinions_to_check:
@@ -125,7 +125,7 @@ def find_news_leads(state: Dict) -> Dict:
                     json_obj["local_path"] = opinion["local_path"]
                     json_obj["date_created"] = opinion["date_created"]
                     json_obj["date_modified"] = opinion["date_modified"]
-                    json_obj["opinions_cited"] = json_obj["opinions_cited"]
+                    json_obj["opinions_cited"] = json_obj.get("opinions_cited", [])
                     newsworthy_opinions.append(json_obj)
         except Exception as e:
             logger.error(f"Error: processing opinion {opinion['resource_uri']}")

@@ -1,5 +1,5 @@
 import os
-
+from media_agents.config import RESOURCES_ROOT_DIR
 # Default locale setting
 app_locale = 'en'  # Default locale
 
@@ -21,8 +21,6 @@ def get_locale():
     global app_locale
     return app_locale
 
-# Root directory for resource files
-RESOURCES_ROOT_DIR = 'resources'
 def get_resource_content(res_file_path):
     """
     Get the content of a resource file for the current locale.
