@@ -1,3 +1,4 @@
+setuptools==70.2.0
 langchain-groq==0.1.5
 langchain-openai==0.1.14
 langchain_community==0.2.5
@@ -12,3 +13,5 @@ fake-useragent==1.5.1
 openai==1.35.9
 python-dotenv==1.0.1
 pandas==2.2.1
+pytest==8.2.2
+argparse==1.4.0

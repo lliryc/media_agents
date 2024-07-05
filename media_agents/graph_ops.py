@@ -1,18 +1,12 @@
-from typing import Dict
 import requests
-import glob
-import json
-import pandas as pd
-from pathlib import Path
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import JsonOutputParser
-from langchain.schema import HumanMessage, SystemMessage, AIMessage
-from app_resources import get_resource_content
+from langchain.schema import HumanMessage, SystemMessage
+from media_agents.app_resources import get_resource_content
 from functools import cache
-import dotenv
 import logging
-import logging_init
+import config
 
 logger = logging.getLogger(__name__)
 
