@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "description": "Schema of news headline",
+  "properties": {
+    "type": "object",
+    "properties": {
+      "headline": {
+        "type": "string",
+        "description": "News article headline"
+      },
+    "required": [
+      "headline"
+    ]
+  }
+}

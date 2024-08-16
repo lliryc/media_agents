@@ -4,9 +4,13 @@ from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import JsonOutputParser
 from langchain.schema import HumanMessage, SystemMessage
 from media_agents.app_resources import get_resource_content
+import json
 from functools import cache
 import logging
 from typing import Dict
+from urllib3.util import parse_url
+from datetime import datetime, UTC
+
 import media_agents.config
 
 # Initialize logger
@@ -174,4 +178,76 @@ def write_articles_draft(state: Dict) -> Dict:
     :return: A dictionary with article drafts.
     """
     opinions = state["opinions_with_keypoints"]
-    return {"article_drafts": opinions}
+    res_article_drafts = []
+    parser = JsonOutputParser()
+    sys_intro = get_resource_content('prompts/draft_prompt.txt')
+    sys_schema = get_resource_content('schemas/draft_output.json')
+    sys_message = compose_sys_content(sys_intro, sys_schema)
+
+    for opinion in opinions:
+        id = opinion["id"]
+        user_content = f"Here is a court opinion id#{id}:\n" + json.dumps(opinion)
+        try:
+            pipeline = client | parser
+            json_obj = pipeline.invoke([
+                    SystemMessage(content=sys_message),
+                    HumanMessage(content=user_content)
+                ]
+            )
+
+            if 'properties' not in json_obj:
+                opinion["news_article"] = json_obj["news_article"]
+                opinion["keywords"] = json_obj["keywords"]
+                res_article_drafts.append(opinion)
+            else:
+                raise Exception("Illegal format of the json output")
+        except Exception as e:
+            logger.error(f"Error: processing opinion {opinion['resource_uri']}")
+            logger.error(e)
+    return {"article_drafts": res_article_drafts}
+
+def generate_headline(state: Dict) -> Dict:
+    """
+    Write news headline based on the news content.
+
+    :param state: The current state containing news articles content.
+    :return: A dictionary with news articles with headlines.
+    """
+    article_drafts = state["article_drafts"]
+    res_articles = []
+    parser = JsonOutputParser()
+    sys_intro = get_resource_content('prompts/headline_prompt.txt')
+    sys_schema = get_resource_content('schemas/headline_output.json')
+    sys_message = compose_sys_content(sys_intro, sys_schema)
+
+    for article_draft in article_drafts:
+        user_content = f"Keywords:\n" + ",".join([kw["keyword"] for kw in article_draft["keywords"]]) + \
+                       f"\n\nNews article:\n:" + json.dumps(article_draft["news_article"])
+        try:
+            pipeline = client | parser
+            json_obj = pipeline.invoke([
+                    SystemMessage(content=sys_message),
+                    HumanMessage(content=user_content)
+                ]
+            )
+
+            if 'properties' not in json_obj:
+                article  = {"source_date_created": article_draft["date_created"], "source_date_modified": article_draft["date_modified"],
+                            "keypoints": article_draft["keypoints"], "headline": json_obj["headline"], "news_article": article_draft["news_article"]}
+                article["keywords"] = [kw["keyword"] for kw in article_draft["keywords"]]
+                article["date_created"] = datetime.now(UTC).isoformat()
+                parsed = parse_url(article_draft["resource_uri"])
+                source_url = parsed.scheme + "://" + parsed.host + article_draft["absolute_url"]
+                article["source_url"] = source_url
+                article["why_newsworthy"] = article_draft["reason"]
+                res_articles.append(article)
+            else:
+                raise Exception("Illegal format of json output")
+        except Exception as e:
+            logger.error(f"Error: processing opinion {article_draft['resource_uri']}")
+            logger.error(e)
+    return {"articles": res_articles}
+
+
+
+

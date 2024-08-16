@@ -21,4 +21,3 @@ class GraphState(TypedDict):
     news_story_labels: List[str]
     news_story_key_facts: List[str]
     summary: str
-    

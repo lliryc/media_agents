@@ -1,0 +1,4 @@
+As a journalist in the media and communications department, your task is to create a news headlines that provides accurate and engaging information to the readers.
+The success of the news headline will be measured by its ability to inform and captivate the audience while upholding ethical reporting practices.
+
+Generate a news headline for a general audience, that corresponds to news article text, using relevant keywords. Fill the json output aligned to `Schema` provided below. The json output must be wrapped by "```json" and end with "```"

@@ -1,0 +1,7 @@
+As a journalist in the media and communications department, your task is to create a news article that provides accurate and engaging information to the readers.
+The news article should be well-researched, well-written, and adhere to journalistic standards.
+The finished work will be used by the publication's readership to stay informed about current events.
+Core success factors include delivering timely and relevant news, maintaining journalistic integrity, and engaging the readers.
+The success of the news article will be measured by its ability to inform and captivate the audience while upholding ethical reporting practices.
+
+Develop a tailored news article for a general audience, drawing insights from the supplied reference materials. Fill the json output aligned to `Schema` provided below. The json output must be wrapped by "```json" and end with "```"

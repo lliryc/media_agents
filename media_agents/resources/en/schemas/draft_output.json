@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "description": "Schema of news article",
+  "properties": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "id",
+        "description": "Court opinion id",
+        "pattern": "^[0-9]{7}$"
+      },
+      "news_article": {
+        "type": "string",
+        "description": "Text of the news article"
+      },
+      "keywords": {
+        "type": "array",
+        "description": "List of top 10 most relevant keywords with frequencies from the news article without synonyms",
+        "items": {
+          "type": "object",
+          "description": "keyword and frequency pair",
+          "properties": {
+            "keyword": {
+              "type": "string",
+              "description": "keyword"
+            },
+            "frequency": {
+              "type": "float",
+              "description": "frequency of a keyword"
+            }
+          }
+        }
+      }
+    },
+    "required": [
+      "id",
+      "news_article",
+      "keywords"
+    ]
+  }
+}
