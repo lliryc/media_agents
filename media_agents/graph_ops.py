@@ -1,3 +1,5 @@
+import os
+
 import requests
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
@@ -10,6 +12,7 @@ import logging
 from typing import Dict
 from urllib3.util import parse_url
 from datetime import datetime, UTC
+import jsonlines
 
 import media_agents.config
 
@@ -60,6 +63,14 @@ def compose_sys_content(message: str, schema: str) -> str:
     {schema}
     ```"""
 
+def init_agent(state: Dict) -> Dict:
+    logger.debug("<-----init_agent state----->")
+    filepath = os.getenv("FETCH_STATE_FILE")
+    with open(filepath, 'r') as sf:
+        state_obj = json.load(sf)
+    logger.debug("</-----init_agent state----->")
+    return state_obj
+
 # URL for Court Listener API
 COURT_LISTENER_URL = 'https://www.courtlistener.com/api/rest/v3/opinions/?'
 
@@ -70,6 +81,7 @@ def fetch_update(state: Dict) -> Dict:
     :param state: The current state containing the last processed opinion ID.
     :return: A dictionary with fetched opinions to check.
     """
+    logger.debug("<-----fetch_update state----->")
     logger.info(f"fetching last updates from {COURT_LISTENER_URL}")
     
     last_id = state["last_processed_id"]
@@ -89,6 +101,7 @@ def fetch_update(state: Dict) -> Dict:
             last_id = int(res['id'])
 
     logger.info(f"{len(opinion_objects)} court opinions fetched ")
+    logger.debug("</-----fetch_update state----->")
     return {"opinions_to_check": opinion_objects}
 
 def find_news_leads(state: Dict) -> Dict:
@@ -98,6 +111,7 @@ def find_news_leads(state: Dict) -> Dict:
     :param state: The current state containing opinions to check.
     :return: A dictionary with newsworthy opinions.
     """
+    logger.debug("<-----find_news_leads state----->")
     opinions_to_check = state["opinions_to_check"]
     newsworthy_opinions = []
     parser = JsonOutputParser()
@@ -134,7 +148,7 @@ def find_news_leads(state: Dict) -> Dict:
         except Exception as e:
             logger.error(f"Error: processing opinion {opinion['resource_uri']}")
             logger.error(e)
-
+    logger.debug("</-----find_news_leads state----->")
     return {"newsworthy_opinions": newsworthy_opinions}
 
 def extract_keypoints(state: Dict) -> Dict:
@@ -144,6 +158,7 @@ def extract_keypoints(state: Dict) -> Dict:
     :param state: The current state containing newsworthy opinions.
     :return: A dictionary with opinions and their key points.
     """
+    logger.debug("<-----extract_keypoints state----->")
     opinions = state["newsworthy_opinions"]
     res_opinions = []
     parser = JsonOutputParser()
@@ -168,6 +183,7 @@ def extract_keypoints(state: Dict) -> Dict:
         except Exception as e:
             logger.error(f"Error: processing opinion {opinion['resource_uri']}")
             logger.error(e)
+    logger.debug("</-----extract_keypoints state----->")
     return {"opinions_with_keypoints": res_opinions}
 
 def write_articles_draft(state: Dict) -> Dict:
@@ -177,6 +193,7 @@ def write_articles_draft(state: Dict) -> Dict:
     :param state: The current state containing opinions with key points.
     :return: A dictionary with article drafts.
     """
+    logger.debug("<-----write_articles_draft state----->")
     opinions = state["opinions_with_keypoints"]
     res_article_drafts = []
     parser = JsonOutputParser()
@@ -204,6 +221,7 @@ def write_articles_draft(state: Dict) -> Dict:
         except Exception as e:
             logger.error(f"Error: processing opinion {opinion['resource_uri']}")
             logger.error(e)
+    logger.debug("</-----write_articles_draft state----->")
     return {"article_drafts": res_article_drafts}
 
 def generate_headline(state: Dict) -> Dict:
@@ -213,6 +231,7 @@ def generate_headline(state: Dict) -> Dict:
     :param state: The current state containing news articles content.
     :return: A dictionary with news articles with headlines.
     """
+    logger.debug("<-----generate_headline state----->")
     article_drafts = state["article_drafts"]
     res_articles = []
     parser = JsonOutputParser()
@@ -246,8 +265,25 @@ def generate_headline(state: Dict) -> Dict:
         except Exception as e:
             logger.error(f"Error: processing opinion {article_draft['resource_uri']}")
             logger.error(e)
+    logger.debug("</-----generate_headline state----->")
     return {"articles": res_articles}
 
+def save_articles(state: Dict) -> Dict:
+    """
+    Store generated news articles in the output folder
+
+    :param state: The current state containing news articles.
+    :return: empty dictionary.
+    """
+    logger.debug("<-----save_articles state----->")
+    article_drafts = state["articles"]
+    dtstamp = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
+    filename = f"legal_news_materials_{dtstamp}.jsonl"
+    filepath = os.path.join(os.getenv('OUTPUT_DIR', 'output'), filename)
+    with jsonlines.open(filepath, mode='w') as writer:
+        writer.write_all(article_drafts)
+    logger.debug("</-----save_articles state----->")
+    return {"news_file": filepath}
 
 
 

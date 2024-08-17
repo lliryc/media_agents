@@ -37,9 +37,9 @@ setup(
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     author="Kirill Chirkunov",
-    packages=find_packages(exclude=["tests", ".github", "state", "insights"]),
+    packages=find_packages(exclude=["tests", ".github", "state", "insights", "output"]),
     install_requires=read_requirements("requirements.txt"),
-    entry_points={
-        "console_scripts": ["project_name = media_agents.__main__:main"]
-    },
+    # entry_points={
+    #     "console_scripts": ["project_name = media_agents.__main__:main"]
+    #},
 )

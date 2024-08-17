@@ -1,11 +1,13 @@
 from langchain.schema import Document
-from langgraph.graph import END, StateGraph
+from langgraph.graph import END, StateGraph, START
+from typing import Dict
 from typing_extensions import TypedDict
 from typing import List
+import graph_ops
 
 ### State
 
-class GraphState(TypedDict):
+class GraphState(Dict):
     """
     Represents the state of our graph.
 
@@ -16,8 +18,43 @@ class GraphState(TypedDict):
         news_story_key_facts (List[str]): Key facts extracted from the opinion that are relevant to the news story.
         summary (str): A summary for the article.
     """
-    initial_opinion: str
-    news_story_criteria_score: List[int]
-    news_story_labels: List[str]
-    news_story_key_facts: List[str]
-    summary: str
+    last_processed_id: int
+    opinions_to_check: List[Dict]
+    newsworthy_opinions: List[Dict]
+    opinions_with_keypoints: List[Dict]
+    article_drafts: List[Dict]
+    articles: List[Dict]
+    news_file: str
+
+def build_workfrlow():
+
+    workflow = StateGraph(GraphState)
+
+    workflow.add_node("init_agent", graph_ops.init_agent)
+    workflow.add_edge(START, "init_agent")
+
+    workflow.add_node("fetch_update", graph_ops.fetch_update)
+    workflow.add_edge("init_agent", "fetch_update")
+
+    workflow.add_node("extract_keypoints", graph_ops.extract_keypoints)
+    workflow.add_edge("fetch_update", "extract_keypoints")
+
+    workflow.add_node("write_articles_draft", graph_ops.write_articles_draft)
+    workflow.add_edge("extract_keypoints", "write_articles_draft")
+
+    workflow.add_node("generate_headline", graph_ops.generate_headline)
+    workflow.add_edge("write_articles_draft", "generate_headline")
+
+    workflow.add_node("save_articles", graph_ops.save_articles)
+
+    workflow.add_edge("generate_headline", "save_articles")
+
+    workflow.add_edge(
+        "save_articles", END)
+
+    return workflow
+
+def compile_workflow(workflow):
+    return workflow.compile()
+
+
