@@ -169,4 +169,4 @@ output/
 # DS_Store
 .DS_Store
 # Subscriptions storage
-subscriptions
+subscriptions/recipients.txt
