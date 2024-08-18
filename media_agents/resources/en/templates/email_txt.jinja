@@ -1,0 +1,41 @@
+Legal News Update - {{ current_date }}
+
+{% for article in articles %}
+================================================================================
+
+{{ article.headline }}
+
+Date: {{ article.source_date_created|date }}
+
+{{ article.news_article|truncate(500) }}
+
+Key Points:
+{% for keypoint in article.keypoints %}
+- {{ keypoint.text }}
+{% endfor %}
+
+Keywords: {{ article.keywords|join(', ') }}
+
+Why Newsworthy: {{ article.why_newsworthy }}
+
+{% if article.people or article.events or article.organizations or article.categories %}
+Additional Information:
+{% if article.people %}
+People Involved: {{ article.people|join(', ') }}
+{% endif %}
+{% if article.events %}
+Related Events: {{ article.events|join(', ') }}
+{% endif %}
+{% if article.organizations %}
+Organizations: {{ article.organizations|join(', ') }}
+{% endif %}
+{% if article.categories %}
+Categories: {{ article.categories|join(', ') }}
+{% endif %}
+{% endif %}
+
+Source: {{ article.source_url }}
+
+================================================================================
+
+{% endfor %}

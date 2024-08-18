@@ -13,6 +13,9 @@ from typing import Dict
 from urllib3.util import parse_url
 from datetime import datetime, UTC
 import jsonlines
+from media_agents.notification_utils import send_email
+from media_agents.template_rendering import render_template
+from media_agents.subscriptions import get_recipients
 
 import media_agents.config
 
@@ -289,6 +292,17 @@ def save_articles(state: Dict) -> Dict:
         writer.write_all(article_drafts)
     logger.debug("</-----save_articles state----->")
     return {"news_file": filepath}
+
+def notify_subscribers(state: Dict) -> Dict:
+    news_file = state["articles"]
+    recipients = get_recipients()
+    current_date = datetime.now(UTC).strftime('%B %d, %Y')
+    subject = f'AI Assistant - Legal News Update - {current_date}'
+    html_body = render_template('templates/email_html.jinja', news_file)
+    txt_body = render_template('templates/email_txt.jinja', news_file)
+    send_email(subject, html_body, txt_body, recipients)
+    return {"notification": "done"}
+
 
 
 

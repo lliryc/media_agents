@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal News Update - {{ current_date }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .article {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .date {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .keywords, .newsworthy, .additional-info {
+            font-size: 0.9em;
+            color: #3498db;
+        }
+        .source {
+            font-size: 0.8em;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Legal News Update - {{ current_date }}</h1>
+
+    {% for article in articles %}
+    <div class="article">
+        <h2>{{ article.headline }}</h2>
+        <p class="date">{{ article.source_date_created|date }}</p>
+        <p>{{ article.news_article|truncate(500) }}</p>
+        <p><strong>Key Points:</strong></p>
+        <ul>
+            {% for keypoint in article.keypoints %}
+            <li>{{ keypoint.text }}</li>
+            {% endfor %}
+        </ul>
+        <p class="keywords"><strong>Keywords:</strong> {{ article.keywords|join(', ') }}</p>
+        <p class="newsworthy"><strong>Why Newsworthy:</strong> {{ article.why_newsworthy }}</p>
+        {% if article.people or article.events or article.organizations or article.categories %}
+        <div class="additional-info">
+            {% if article.people %}
+            <p><strong>People Involved:</strong> {{ article.people|join(', ') }}</p>
+            {% endif %}
+            {% if article.events %}
+            <p><strong>Related Events:</strong> {{ article.events|join(', ') }}</p>
+            {% endif %}
+            {% if article.organizations %}
+            <p><strong>Organizations:</strong> {{ article.organizations|join(', ') }}</p>
+            {% endif %}
+            {% if article.categories %}
+            <p><strong>Categories:</strong> {{ article.categories|join(', ') }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+        <p class="source">Source: <a href="{{ article.source_url }}">Court Listener</a></p>
+    </div>
+    {% endfor %}
+</body>
+</html>

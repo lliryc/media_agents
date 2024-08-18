@@ -166,3 +166,7 @@ state/
 insights/
 # Output files
 output/
+# DS_Store
+.DS_Store
+# Subscriptions storage
+subscriptions

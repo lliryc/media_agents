@@ -25,6 +25,7 @@ class GraphState(Dict):
     article_drafts: List[Dict]
     articles: List[Dict]
     news_file: str
+    notification: str
 
 def build_workfrlow():
 
@@ -49,11 +50,13 @@ def build_workfrlow():
     workflow.add_edge("write_articles_draft", "generate_headline")
 
     workflow.add_node("save_articles", graph_ops.save_articles)
-
     workflow.add_edge("generate_headline", "save_articles")
 
+    workflow.add_node("notify_subscribers", graph_ops.notify_subscribers)
+    workflow.add_edge("save_articles", "notify_subscribers")
+
     workflow.add_edge(
-        "save_articles", END)
+        "notify_subscribers", END)
 
     return workflow
 
