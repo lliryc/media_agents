@@ -1,17 +1,26 @@
 import json
 import datetime
-import jsonlines
+import json
 from jinja2 import Environment, BaseLoader
-import app_resources
+from media_agents.app_resources import get_resource_content
 
 def render_template(template_res_path, data_json_path) -> str:
     # Get json
     data_collection = []
-    with jsonlines.open(data_json_path) as reader:
-            for obj in reader:
-                data_collection.append(obj)
+    with open(data_json_path, 'r') as fr:
+        for line in fr.readlines():
+            data_collection.append(json.loads(line))
+    for item in data_collection:
+        keys = list(item.keys())
+        for k in keys:
+            if 'date' in k:
+                try:
+                    item[k] = datetime.datetime.fromisoformat(item[k]).strftime('%B %d, %Y')
+                except Exception:
+                    continue
+
     # Create Jinja2 template
-    template_str = app_resources.get_resource_content(template_res_path)
+    template_str = get_resource_content(template_res_path)
     template = Environment(loader=BaseLoader()).from_string(template_str)
 
     # Get current date in UTC

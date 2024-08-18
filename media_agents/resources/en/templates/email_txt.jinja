@@ -5,9 +5,9 @@ Legal News Update - {{ current_date }}
 
 {{ article.headline }}
 
-Date: {{ article.source_date_created|date }}
+Date: {{ article.source_date_created }}
 
-{{ article.news_article|truncate(500) }}
+{{ article.news_article }}
 
 Key Points:
 {% for keypoint in article.keypoints %}

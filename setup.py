@@ -39,7 +39,7 @@ setup(
     author="Kirill Chirkunov",
     packages=find_packages(exclude=["tests", ".github", "state", "insights", "output"]),
     install_requires=read_requirements("requirements.txt"),
-    # entry_points={
-    #     "console_scripts": ["project_name = media_agents.__main__:main"]
-    #},
+    entry_points={
+         "console_scripts": ["project_name = media_agents.__main__:main"]
+    },
 )

@@ -294,7 +294,7 @@ def save_articles(state: Dict) -> Dict:
     return {"news_file": filepath}
 
 def notify_subscribers(state: Dict) -> Dict:
-    news_file = state["articles"]
+    news_file = state["news_file"]
     recipients = get_recipients()
     current_date = datetime.now(UTC).strftime('%B %d, %Y')
     subject = f'AI Assistant - Legal News Update - {current_date}'

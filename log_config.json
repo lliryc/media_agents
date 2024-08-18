@@ -2,13 +2,13 @@
     "version":1,
     "root":{
         "handlers" : ["console", "file"],
-        "level": "DEBUG"
+        "level": "INFO"
     },
     "handlers":{
         "console":{
             "formatter": "std_out",
             "class": "logging.StreamHandler",
-            "level": "DEBUG"
+            "level": "INFO"
         },
         "file":{
             "formatter":"std_out",

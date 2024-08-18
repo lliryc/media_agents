@@ -6,7 +6,7 @@ import os
 import datetime
 
 
-test_data_specimen = {"opinions": [], "opinions_with_keypoints": [], "newsworthy_opinions": [], "article_drafts": [], "articles": []}
+test_data_specimen = {"opinions": [], "opinions_with_keypoints": [], "newsworthy_opinions": [], "article_drafts": [], "articles": [], "news_file": ""}
 def setup_module(graph_ops):
     with open("tests/data/opinion1.json", "r") as fh1:
         opinion1 = json.load(fh1)
@@ -23,6 +23,8 @@ def setup_module(graph_ops):
     with open("tests/data/article1.json", "r") as fa1:
         article1 = json.load(fa1)
         test_data_specimen["articles"].append(article1)
+
+    test_data_specimen["news_file"] = "tests/data/legal_news_materials_1.jsonl"
 
 def test_find_news_leads():
     state = {"opinions_to_check": test_data_specimen["opinions"]}
@@ -62,6 +64,12 @@ def test_save_articles():
     filepath = new_state["news_file"]
     assert os.path.exists(filepath)
     os.remove(filepath)
+
+def test_notification():
+    state = {"news_file": test_data_specimen["news_file"]}
+    new_state = graph_ops.notify_subscribers(state)
+    assert "notification" in new_state
+    assert new_state["notification"] == "done"
 
 
 
