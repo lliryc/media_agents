@@ -3,7 +3,7 @@ from langgraph.graph import END, StateGraph, START
 from typing import Dict
 from typing_extensions import TypedDict
 from typing import List
-import graph_ops
+from media_agents import graph_ops
 
 ### State
 
@@ -36,8 +36,11 @@ def build_workfrlow():
     workflow.add_node("fetch_update", graph_ops.fetch_update)
     workflow.add_edge("init_agent", "fetch_update")
 
+    workflow.add_node("find_news_leads", graph_ops.find_news_leads)
+    workflow.add_edge("fetch_update", "find_news_leads")
+
     workflow.add_node("extract_keypoints", graph_ops.extract_keypoints)
-    workflow.add_edge("fetch_update", "extract_keypoints")
+    workflow.add_edge("find_news_leads", "extract_keypoints")
 
     workflow.add_node("write_articles_draft", graph_ops.write_articles_draft)
     workflow.add_edge("extract_keypoints", "write_articles_draft")

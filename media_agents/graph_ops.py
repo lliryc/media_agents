@@ -122,7 +122,7 @@ def find_news_leads(state: Dict) -> Dict:
     for opinion in opinions_to_check:
         id = opinion["id"]
         user_content = f"Here is a court opinion id#{id}:\n" + opinion["plain_text"]
-        if 'SUPREME COURT' not in user_content:
+        if 'supreme court' not in str.lower(user_content):
             continue
 
         try:
@@ -148,6 +148,7 @@ def find_news_leads(state: Dict) -> Dict:
         except Exception as e:
             logger.error(f"Error: processing opinion {opinion['resource_uri']}")
             logger.error(e)
+    logger.info(f"{len(newsworthy_opinions)} court opinions detected as newsworthy")
     logger.debug("</-----find_news_leads state----->")
     return {"newsworthy_opinions": newsworthy_opinions}
 
@@ -259,6 +260,10 @@ def generate_headline(state: Dict) -> Dict:
                 source_url = parsed.scheme + "://" + parsed.host + article_draft["absolute_url"]
                 article["source_url"] = source_url
                 article["why_newsworthy"] = article_draft["reason"]
+                article["people"] = article_draft.get("people", "")
+                article["events"] = article_draft.get("events", "")
+                article["organizations"] = article_draft.get("organizations", "")
+                article["categories"] = article_draft.get("labels", "")
                 res_articles.append(article)
             else:
                 raise Exception("Illegal format of json output")
