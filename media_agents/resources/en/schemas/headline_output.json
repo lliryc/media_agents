@@ -8,8 +8,9 @@
         "type": "string",
         "description": "News article headline"
       },
-    "required": [
-      "headline"
-    ]
+      "required": [
+        "headline"
+      ]
+    }
   }
 }

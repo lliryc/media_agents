@@ -1,0 +1,194 @@
+{
+  "type": "object",
+  "description": "Schema of editorial assessment",
+  "properties": {
+    "accuracy_and_factual_correctness": {
+      "type": "object",
+      "description": "Measures the extent to which all information in the article is verifiably true and free from errors. This is crucial for maintaining credibility and trust with readers.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (numerous factual errors) to 10 (completely accurate and well-verified)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "objectivity_and_lack_of_bias": {
+      "type": "object",
+      "description": "Evaluates how well the article presents information impartially, without favoring any particular perspective or agenda. It should represent all sides of an issue fairly.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (heavily biased) to 10 (completely objective and balanced)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "clarity_and_coherence": {
+      "type": "object",
+      "description": "Assesses how well the article communicates its message, ensuring that ideas flow logically and the writing is easy to understand for the target audience.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (confusing and incoherent) to 10 (exceptionally clear and well-structured)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "relevance": {
+      "type": "object",
+      "description": "Determines whether the article reflects interesting topics for the audience",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (outdated or irrelevant) to 10 (highly timely and relevant)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score (empty if score is 10)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "writing_style_and_engagement": {
+      "type": "object",
+      "description": "Measures how well the article captures and maintains reader interest through effective use of language, narrative techniques, and storytelling elements where appropriate.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (dull and unengaging) to 10 (highly engaging and well-written)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score (empty if score is 10)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ethical_reporting_practices": {
+      "type": "object",
+      "description": "Assesses adherence to journalistic ethics, including respect for privacy, protection of sources, and avoidance of sensationalism or exploitation.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (numerous ethical concerns) to 10 (exemplary ethical standards)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score (empty if score is 10)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "context_and_background_information": {
+      "type": "object",
+      "description": "Measures how well the article provides necessary background and contextual information to help readers fully understand the significance of the news.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (lacks context) to 10 (provides comprehensive context and background)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score (empty if score is 10)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "grammar_spelling_and_punctuation": {
+      "type": "object",
+      "description": "Evaluates the technical accuracy of the writing, ensuring it meets high standards of professional journalism.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (numerous errors) to 10 (flawless grammar, spelling, and punctuation)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score (empty if score is 10)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "structure_and_organization": {
+      "type": "object",
+      "description": "Assesses how well the article is structured, including the use of lead paragraphs, logical flow of information, and appropriate use of subheadings or sections.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (poorly structured) to 10 (excellently organized and structured)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score (empty if score is 10)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "use_of_quotes_and_attribution": {
+      "type": "object",
+      "description": "Evaluates the appropriate use and attribution of quotes, ensuring they add value to the story and are properly contextualized.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (misused or poorly attributed quotes) to 10 (excellent use and attribution of quotes)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score (empty if score is 10)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "newsworthiness": {
+      "type": "object",
+      "description": "Evaluates the overall importance and interest of the story to the publication's audience, considering factors such as impact, prominence, and human interest.",
+      "properties": {
+        "score": {
+          "type": "int",
+          "description": "Score range: 1 (not newsworthy) to 10 (highly newsworthy and impactful)"
+        },
+        "comments": {
+          "type": "array",
+          "description": "List of precise critical comments with references to original text that correspond to criteria score (empty if score is 10)",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": "all"
+}

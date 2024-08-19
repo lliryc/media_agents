@@ -11,7 +11,7 @@
       },
       "news_article": {
         "type": "string",
-        "description": "Text of the news article"
+        "description": "Text of the news article without headline. 200-600 words without headline. Use \\n\\n to split paragraphs"
       },
       "keywords": {
         "type": "array",

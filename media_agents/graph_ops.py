@@ -3,6 +3,8 @@ import os
 import requests
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
+from langchain_fireworks import ChatFireworks
 from langchain_core.output_parsers import JsonOutputParser
 from langchain.schema import HumanMessage, SystemMessage
 from media_agents.app_resources import get_resource_content
@@ -26,8 +28,24 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 
-# Initialize the OpenAI client
-client = ChatOpenAI(model="gpt-4-turbo", temperature=0.7)
+def create_client():
+    llm_client = os.getenv("LLM_CLIENT", "gpt-4-turbo")
+    client = None
+    if 'llama' in llm_client:
+        client = (ChatFireworks(model=llm_client, temperature=0.7))
+        logger.info(f"init ChatGroq:{llm_client}")
+    elif 'gpt' in llm_client:
+        client = ChatOpenAI(model=llm_client, temperature=0.7)
+        logger.info(f"init ChatOpenAI:{llm_client}")
+    else: # by default
+        client = ChatOpenAI(model=llm_client, temperature=0.7)
+        logger.info(f"init ChatOpenAI by default:{llm_client}")
+
+    return client
+
+# Initialize the LLM client
+
+client = create_client()
 
 @cache
 def get_content(url: str) -> Dict:
@@ -228,6 +246,34 @@ def write_articles_draft(state: Dict) -> Dict:
             logger.error(e)
     logger.debug("</-----write_articles_draft state----->")
     return {"article_drafts": res_article_drafts}
+
+def editorial_assessment(state: Dict) -> Dict:
+    article_drafts = state["article_drafts"]
+    res_assessments = []
+    res_article_drafts = []
+    parser = JsonOutputParser()
+    sys_intro = get_resource_content('prompts/article_assessment_prompt.txt')
+    sys_schema = get_resource_content('schemas/article_assessment.json')
+    sys_message = compose_sys_content(sys_intro, sys_schema)
+    for article_draft in article_drafts:
+        user_content = f"News article draft:\n\n" + article_draft["news_article"]
+        try:
+            pipeline = client | parser
+            json_obj = pipeline.invoke([
+                    SystemMessage(content=sys_message),
+                    HumanMessage(content=user_content)
+                ]
+            )
+
+            if 'properties' not in json_obj:
+                res_assessments.append(json_obj)
+                res_article_drafts.append(article_draft)
+            else:
+                raise Exception("Illegal format of json output")
+        except Exception as e:
+            logger.error(f"Error: processing opinion {article_draft['resource_uri']}")
+            logger.error(e)
+    return {"assessments": res_assessments, "article_drafts": res_article_drafts}
 
 def generate_headline(state: Dict) -> Dict:
     """

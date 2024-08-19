@@ -1,5 +1,6 @@
 setuptools==70.2.0
-langchain-groq==0.1.5
+langchain-groq==0.1.9
+langchain-fireworks==0.1.7
 langchain-openai==0.1.14
 langchain_community==0.2.5
 tiktoken==0.7.0

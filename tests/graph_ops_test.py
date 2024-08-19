@@ -51,6 +51,13 @@ def test_write_articles_draft():
 #        json.dump(new_state["article_drafts"][0], fo)
     assert(("article_drafts" in new_state) and len(new_state["article_drafts"]) == 1 and ("news_article" in new_state["article_drafts"][0]))
 
+def test_editorial_assessment():
+    state = {"article_drafts": test_data_specimen["article_drafts"]}
+    new_state = graph_ops.editorial_assessment(state)
+    with open("assessment1.json", "w") as fa:
+        json.dump(new_state["assessments"][0], fa)
+    assert(("assessments" in new_state) and ("article_drafts" in new_state) and len(new_state["assessments"] == 1))
+
 def test_write_articles_headline():
     state = {"article_drafts": test_data_specimen["article_drafts"]}
     new_state = graph_ops.generate_headline(state)
