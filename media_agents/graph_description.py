@@ -25,6 +25,7 @@ class GraphState(Dict):
     article_drafts: List[Dict]
     articles: List[Dict]
     news_file: str
+    news_num: int
     notification: str
 
 def build_workfrlow():

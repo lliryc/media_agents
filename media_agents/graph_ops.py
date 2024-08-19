@@ -264,10 +264,14 @@ def generate_headline(state: Dict) -> Dict:
                 source_url = parsed.scheme + "://" + parsed.host + article_draft["absolute_url"]
                 article["source_url"] = source_url
                 article["why_newsworthy"] = article_draft["reason"]
-                article["people"] = article_draft.get("people", "")
-                article["events"] = article_draft.get("events", "")
-                article["organizations"] = article_draft.get("organizations", "")
-                article["categories"] = article_draft.get("labels", "")
+                if "people" in article_draft:
+                    article["people"] = article_draft["people"]
+                if "events" in article_draft:
+                    article["events"] = article_draft["events"]
+                if "organizations" in article_draft:
+                    article["organizations"] = article_draft["organizations"]
+                if "labels" in article_draft:
+                    article["categories"] = article_draft["labels"]
                 res_articles.append(article)
             else:
                 raise Exception("Illegal format of json output")
@@ -295,9 +299,12 @@ def save_articles(state: Dict) -> Dict:
     with jsonlines.open(filepath, mode='w') as writer:
         writer.write_all(article_drafts)
     logger.debug("</-----save_articles state----->")
-    return {"news_file": filepath}
+    return {"news_file": filepath, "news_num": len(article_drafts)}
 
 def notify_subscribers(state: Dict) -> Dict:
+    news_num = state["news_num"]
+    if news_num == 0:
+        return {"notification": "skipped"}
     news_file = state["news_file"]
     recipients = get_recipients()
     current_date = datetime.now(UTC).strftime('%B %d, %Y')

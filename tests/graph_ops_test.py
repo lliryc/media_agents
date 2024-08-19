@@ -25,6 +25,7 @@ def setup_module(graph_ops):
         test_data_specimen["articles"].append(article1)
 
     test_data_specimen["news_file"] = "tests/data/legal_news_materials_1.jsonl"
+    test_data_specimen["news_num"] = 3
 
 def test_find_news_leads():
     state = {"opinions_to_check": test_data_specimen["opinions"]}
@@ -66,10 +67,16 @@ def test_save_articles():
     os.remove(filepath)
 
 def test_notification():
-    state = {"news_file": test_data_specimen["news_file"]}
+    state = {"news_file": test_data_specimen["news_file"], }
     new_state = graph_ops.notify_subscribers(state)
     assert "notification" in new_state
     assert new_state["notification"] == "done"
+
+def test_notification_skip():
+    state = {"news_file": test_data_specimen["news_file"], "news_num": 0}
+    new_state = graph_ops.notify_subscribers(state)
+    assert "notification" in new_state
+    assert new_state["notification"] == "skipped"
 
 
 

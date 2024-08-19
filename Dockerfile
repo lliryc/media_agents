@@ -17,7 +17,8 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY media_agents/ $MEDIA_AGENTS_DIR/media_agents/
 COPY app/ $MEDIA_AGENTS_DIR/app/
 COPY state/ $MEDIA_AGENTS_DIR/state/
-COPY subscriptions/ $MEDIA_AGENTS_DIR/subscriptions/
+RUN mkdir -p $MEDIA_AGENTS_DIR/subscriptions
+COPY subscriptions/recipients.txt.example $MEDIA_AGENTS_DIR/subscriptions/recipients.txt
 COPY .env.example $MEDIA_AGENTS_DIR/.env
 COPY LICENSE $MEDIA_AGENTS_DIR/LICENSE
 COPY log_config.json $MEDIA_AGENTS_DIR/log_config.json
