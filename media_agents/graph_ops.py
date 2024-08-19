@@ -16,6 +16,7 @@ import jsonlines
 from media_agents.notification_utils import send_email
 from media_agents.template_rendering import render_template
 from media_agents.subscriptions import get_recipients
+from pathlib import Path
 
 import media_agents.config
 
@@ -287,7 +288,10 @@ def save_articles(state: Dict) -> Dict:
     article_drafts = state["articles"]
     dtstamp = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
     filename = f"legal_news_materials_{dtstamp}.jsonl"
-    filepath = os.path.join(os.getenv('OUTPUT_DIR', 'output'), filename)
+    output_dir = os.getenv('OUTPUT_DIR', 'output')
+    path = Path(output_dir)
+    path.mkdir(parents=True, exist_ok=True)
+    filepath = os.path.join(output_dir, filename)
     with jsonlines.open(filepath, mode='w') as writer:
         writer.write_all(article_drafts)
     logger.debug("</-----save_articles state----->")
@@ -302,7 +306,3 @@ def notify_subscribers(state: Dict) -> Dict:
     txt_body = render_template('templates/email_txt.jinja', news_file)
     send_email(subject, html_body, txt_body, recipients)
     return {"notification": "done"}
-
-
-
-
