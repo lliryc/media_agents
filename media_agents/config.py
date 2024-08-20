@@ -6,4 +6,5 @@ NAME = "media_agents"
 RESOURCES_ROOT_DIR = "media_agents/resources"
 # Url  court opinions open api
 COURT_LISTENER_OPINIONS_API_URL = "https://www.courtlistener.com/api/rest/v3/opinions/?"
-#LLM_CLIENT="llama-3.1-405b-reasoning" # "llama-3.1-405b-reasoning" or "gpt-4-turbo"
+# Max attempts for re-writing article
+MAX_ATTEMPTS = 3

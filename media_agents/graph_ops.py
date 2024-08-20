@@ -11,7 +11,7 @@ from media_agents.app_resources import get_resource_content
 import json
 from functools import cache
 import logging
-from typing import Dict
+from typing import Dict, Literal
 from urllib3.util import parse_url
 from datetime import datetime, UTC
 import jsonlines
@@ -20,7 +20,7 @@ from media_agents.template_rendering import render_template
 from media_agents.subscriptions import get_recipients
 from pathlib import Path
 
-import media_agents.config
+import media_agents.config as config
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -183,6 +183,7 @@ def extract_keypoints(state: Dict) -> Dict:
     """
     logger.debug("<-----extract_keypoints state----->")
     opinions = state["newsworthy_opinions"]
+    logger.info(f"extract keypoints: {len(opinions)} opinions")
     res_opinions = []
     parser = JsonOutputParser()
     sys_intro = get_resource_content('prompts/keypoints_prompt.txt')
@@ -218,6 +219,7 @@ def write_articles_draft(state: Dict) -> Dict:
     """
     logger.debug("<-----write_articles_draft state----->")
     opinions = state["opinions_with_keypoints"]
+    logger.info(f"write articles: {len(opinions)} court opinions")
     res_article_drafts = []
     parser = JsonOutputParser()
     sys_intro = get_resource_content('prompts/draft_prompt.txt')
@@ -249,7 +251,10 @@ def write_articles_draft(state: Dict) -> Dict:
 
 def editorial_assessment(state: Dict) -> Dict:
     article_drafts = state["article_drafts"]
-    res_assessments = []
+    logger.info(f"editorial assessment: {len(article_drafts)} drafts")
+    attempts = state.get("attempts")
+    if attempts is None:
+        attempts = 1
     res_article_drafts = []
     parser = JsonOutputParser()
     sys_intro = get_resource_content('prompts/article_assessment_prompt.txt')
@@ -266,14 +271,70 @@ def editorial_assessment(state: Dict) -> Dict:
             )
 
             if 'properties' not in json_obj:
-                res_assessments.append(json_obj)
+                article_draft["editor_feedback"] = json_obj
                 res_article_drafts.append(article_draft)
             else:
                 raise Exception("Illegal format of json output")
         except Exception as e:
             logger.error(f"Error: processing opinion {article_draft['resource_uri']}")
             logger.error(e)
-    return {"assessments": res_assessments, "article_drafts": res_article_drafts}
+    return {"article_drafts": res_article_drafts, "attempts": attempts}
+
+# Define the function that determines whether to continue or not
+def should_continue(state: Dict) -> Literal["generate_headline", "rewrite_articles_draft"]:
+    articles = state["article_drafts"]
+    attempts = state["attempts"]
+    logger.info(f"should continue? {attempts} attempts, {len(articles)} articles")
+    if attempts < config.MAX_ATTEMPTS:
+        for article in articles:
+            assessment = article['editor_feedback']
+            for k in assessment:
+                criteria = assessment[k]
+                if int(criteria["score"]) <= 8:
+                    return "rewrite_articles_draft"
+    return "generate_headline"
+
+def rewrite_articles_draft(state: Dict) -> Dict:
+    """
+    Write draft articles based on the opinions with key points.
+
+    :param state: The current state containing opinions with key points.
+    :return: A dictionary with article drafts.
+    """
+    logger.info(f"re-write article")
+    logger.debug("<-----re-write_articles_draft state----->")
+    opinions = state["article_drafts"]
+    attempts = state.get("attempts", 1)
+    res_article_drafts = []
+    parser = JsonOutputParser()
+    sys_intro = get_resource_content('prompts/rewrite_draft_prompt.txt')
+    sys_schema = get_resource_content('schemas/rewritten_draft_output.json')
+    sys_message = compose_sys_content(sys_intro, sys_schema)
+
+    for opinion in opinions:
+        id = opinion["id"]
+        user_content = f"Here is a court opinion id#{id}:\n" + json.dumps(opinion)
+        try:
+            pipeline = client | parser
+            json_obj = pipeline.invoke([
+                    SystemMessage(content=sys_message),
+                    HumanMessage(content=user_content)
+                ]
+            )
+
+            if 'properties' not in json_obj:
+                opinion["news_article"] = json_obj["rewritten_news_article"]
+                opinion["keywords"] = json_obj["keywords"]
+                res_article_drafts.append(opinion)
+            else:
+                raise Exception("Illegal format of the json output")
+        except Exception as e:
+            logger.error(f"Error: processing opinion {opinion['resource_uri']}")
+            logger.error(e)
+    logger.debug("</-----re-write_articles_draft state----->")
+    attempts += 1
+    return {"article_drafts": res_article_drafts, "attempts": attempts}
+
 
 def generate_headline(state: Dict) -> Dict:
     """
@@ -284,6 +345,7 @@ def generate_headline(state: Dict) -> Dict:
     """
     logger.debug("<-----generate_headline state----->")
     article_drafts = state["article_drafts"]
+    logger.info(f"generate headlines: {article_drafts} drafts")
     res_articles = []
     parser = JsonOutputParser()
     sys_intro = get_resource_content('prompts/headline_prompt.txt')
@@ -336,6 +398,7 @@ def save_articles(state: Dict) -> Dict:
     """
     logger.debug("<-----save_articles state----->")
     article_drafts = state["articles"]
+    logger.info(f"saving {len(article_drafts)} articles")
     dtstamp = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
     filename = f"legal_news_materials_{dtstamp}.jsonl"
     output_dir = os.getenv('OUTPUT_DIR', 'output')
@@ -353,6 +416,7 @@ def notify_subscribers(state: Dict) -> Dict:
         return {"notification": "skipped"}
     news_file = state["news_file"]
     recipients = get_recipients()
+    logger.info(f"news letter for {len(recipients)} subscribers")
     current_date = datetime.now(UTC).strftime('%B %d, %Y')
     subject = f'AI Assistant - Legal News Update - {current_date}'
     html_body = render_template('templates/email_html.jinja', news_file)

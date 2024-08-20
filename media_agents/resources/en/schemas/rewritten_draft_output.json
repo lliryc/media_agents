@@ -9,9 +9,9 @@
         "description": "Court opinion id",
         "pattern": "^[0-9]{7}$"
       },
-      "news_article": {
+      "rewritten_news_article": {
         "type": "string",
-        "description": "Text of the news article without headline. 200-600 words. Use \\n\\n to split paragraphs"
+        "description": "Text of the re-written news article without headline. 200-600 words. Use \\n\\n to split paragraphs"
       },
       "keywords": {
         "type": "array",

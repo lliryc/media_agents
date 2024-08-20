@@ -27,6 +27,7 @@ class GraphState(Dict):
     news_file: str
     news_num: int
     notification: str
+    attempts: int
 
 def build_workfrlow():
 
@@ -47,8 +48,12 @@ def build_workfrlow():
     workflow.add_node("write_articles_draft", graph_ops.write_articles_draft)
     workflow.add_edge("extract_keypoints", "write_articles_draft")
 
+    workflow.add_node("editorial_assessment", graph_ops.editorial_assessment)
+    workflow.add_edge("write_articles_draft", "editorial_assessment")
+
+    workflow.add_node("rewrite_articles_draft", graph_ops.rewrite_articles_draft)
     workflow.add_node("generate_headline", graph_ops.generate_headline)
-    workflow.add_edge("write_articles_draft", "generate_headline")
+    workflow.add_conditional_edges("editorial_assessment", graph_ops.should_continue)
 
     workflow.add_node("save_articles", graph_ops.save_articles)
     workflow.add_edge("generate_headline", "save_articles")
@@ -62,6 +67,6 @@ def build_workfrlow():
     return workflow
 
 def compile_workflow(workflow):
-    return workflow.compile()
+    return  workflow.compile()
 
 
