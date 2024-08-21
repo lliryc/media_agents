@@ -33,7 +33,7 @@ def create_client():
     client = None
     if 'llama' in llm_client:
         client = (ChatFireworks(model=llm_client, temperature=0.7))
-        logger.info(f"init ChatGroq:{llm_client}")
+        logger.info(f"init ChatFireworks:{llm_client}")
     elif 'gpt' in llm_client:
         client = ChatOpenAI(model=llm_client, temperature=0.7)
         logger.info(f"init ChatOpenAI:{llm_client}")
