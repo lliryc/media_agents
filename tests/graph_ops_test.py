@@ -66,7 +66,7 @@ def test_write_articles_draft():
     assert(("article_drafts" in new_state) and len(new_state["article_drafts"]) == 1 and ("news_article" in new_state["article_drafts"][0]))
 
 def test_editorial_assessment():
-    state = {"article_drafts": test_data_specimen["article_drafts"]}
+    state = {"article_drafts": test_data_specimen["article_drafts"], "best_article_drafts": {}}
     new_state = graph_ops.editorial_assessment(state)
     assert(("article_drafts" in new_state) and (len(new_state["article_drafts"]) == 1) and ("editor_feedback" in new_state["article_drafts"][0]))
     article = new_state["article_drafts"][0]

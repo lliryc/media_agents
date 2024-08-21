@@ -251,6 +251,9 @@ def write_articles_draft(state: Dict) -> Dict:
 
 def editorial_assessment(state: Dict) -> Dict:
     article_drafts = state["article_drafts"]
+    best_article_drafts = state["best_article_drafts"]
+    if best_article_drafts is None:
+        best_article_drafts = {}
     logger.info(f"editorial assessment: {len(article_drafts)} drafts")
     attempts = state.get("attempts")
     if attempts is None:
@@ -273,12 +276,22 @@ def editorial_assessment(state: Dict) -> Dict:
             if 'properties' not in json_obj:
                 article_draft["editor_feedback"] = json_obj
                 res_article_drafts.append(article_draft)
+                # best article estimation
+                score_avg = sum([float(article_draft["editor_feedback"][crit]["score"]) for crit in article_draft["editor_feedback"]]) / len(article_draft["editor_feedback"])
+                id = article_draft['id']
+                if id not in best_article_drafts:
+                    best_article_drafts[id] = {'news_article': article_draft['news_article'], 'keywords':  article_draft['keywords'], 'score': score_avg}
+                elif best_article_drafts[id]['score'] < score_avg:
+                    logger.info(f'Article draft {str(id)} was improved after revise')
+                    best_article_drafts[id]['news_article'] = article_draft['news_article']
+                    best_article_drafts[id]['keywords'] = article_draft['keywords']
+                    best_article_drafts[id]['score'] = score_avg
             else:
                 raise Exception("Illegal format of json output")
         except Exception as e:
             logger.error(f"Error: processing opinion {article_draft['resource_uri']}")
             logger.error(e)
-    return {"article_drafts": res_article_drafts, "attempts": attempts}
+    return {"article_drafts": res_article_drafts, "best_article_drafts": best_article_drafts, "attempts": attempts}
 
 # Define the function that determines whether to continue or not
 def should_continue(state: Dict) -> Literal["generate_headline", "rewrite_articles_draft"]:
@@ -333,7 +346,7 @@ def rewrite_articles_draft(state: Dict) -> Dict:
             logger.error(e)
     logger.debug("</-----re-write_articles_draft state----->")
     attempts += 1
-    return {"article_drafts": res_article_drafts, "attempts": attempts}
+    return {"article_drafts": res_article_drafts, "attempts": attempts, "best_article_drafts": state["best_article_drafts"]}
 
 
 def generate_headline(state: Dict) -> Dict:
