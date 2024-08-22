@@ -7,7 +7,7 @@ Legal News Update - {{ current_date }}
 
 Date: {{ article.source_date_created }}
 
-{{ article.news_article }}
+{{ article.news_article | replace("\\n", "\n") }}
 
 Key Points:
 {% for keypoint in article.keypoints %}

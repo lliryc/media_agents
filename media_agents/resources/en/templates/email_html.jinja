@@ -42,7 +42,7 @@
     <div class="article">
         <h2>{{ article.headline }}</h2>
         <p class="date">{{ article.source_date_created }}</p>
-        <p>{{ article.news_article | replace("\n", "<br/>") }}</p>
+        <p>{{ article.news_article | replace("\\n", "\n")  | replace("\n", "<br/>") }}</p>
         <p><strong>Key Points:</strong></p>
         <ul>
             {% for keypoint in article.keypoints %}
