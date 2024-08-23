@@ -24,7 +24,7 @@ Clone the repository:
 ```bash
 git clone https://github.com/lliryc/media_agents.git
 cd media_agents
-python setup.py install
+python3 setup.py install
 ```
 
 ## Setup env variables
