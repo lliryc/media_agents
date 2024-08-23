@@ -61,4 +61,4 @@ Once all documents was processed, your recepients will get a email with news lea
 Feel free to open issues or submit pull requests if you have suggestions or improvements.
 
 ## License
-This project is licensed under the  Apache License (Version 2.0, January 2004) - see the LICENSE file for details.
+This project is licensed under the  Apache License (Version 2.0, January 2004) - see the [LICENSE](LICENSE) file for details.
