@@ -13,7 +13,7 @@ Media Agents is a Python-based project that implements Llama-3.1 / GPT4 based LL
 Before using Media Agents, ensure you have the following:
 
 - Python 3.10 or higher installed.
-- **media_agents** package installed (see the Installation section).
+- **media_agents** package installed (see the [Installation](#Installation) section).
 - Setup env variables
 - Setup email recipients' list.
 
