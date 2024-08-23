@@ -1,6 +1,6 @@
 # Media Agents
 
-Media Agents is a Python-based project that implements Llama-3.1 / GPT4 based assistant which helps journalists to find news leads and materials for news based on [CourtListener](https://www.courtlistener.com/) online base. This system utilizes natural language processing and a graph-based workflow to find newsworthy stories, extract key facts and references, and compose draft with headline from various opinions and sources.
+Media Agents is a Python-based project that implements Llama-3.1 / GPT4 based LLM assistant which helps journalists to find news leads and materials for news based on [CourtListener](https://www.courtlistener.com/) online base. This system utilizes natural language processing and a graph-based workflow to find newsworthy stories, extract key facts and references, and compose draft with headline from various opinions and sources.
 
 ## Features
 
@@ -49,13 +49,24 @@ recipient2@example.com
 recipient3@example.com
 ```
 
-## Run AI assistant
+## Run LLM assistant
 To run a program type following command in the console 
-```batch
+
+```bash
 python3 app/app.py
 ```
+
 After that AI assistant will start processing recent updates from [CourtListener](https://www.courtlistener.com/) portal. Usually it takes about 2-3 hours to process recently published legal documents.
 Once all documents was processed, your recepients will get a email with news leads and support materials for news writing.
+
+## Run LLM assistant as a Docker container
+To launch a program as a Docker container use following command
+
+```bash
+bash start_container.sh
+```
+
+Please ensure you logged in on [Docker Hub](https://hub.docker.com/)
 
 ## Contributing
 Feel free to open issues or submit pull requests if you have suggestions or improvements.
