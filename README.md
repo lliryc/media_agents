@@ -1,6 +1,6 @@
 # Media Agents
 
-Media Agents is a Python-based project that implements AI assistant which helps journalists to find news leads and materials for news based on CourtListener online base. This system utilizes natural language processing and a graph-based workflow to find newsworthy stories, extract key facts and references, and compose draft with headline from various opinions and sources.
+Media Agents is a Python-based project that implements LLM assistant which helps journalists to find news leads and materials for news based on CourtListener online base. This system utilizes natural language processing and a graph-based workflow to find newsworthy stories, extract key facts and references, and compose draft with headline from various opinions and sources.
 
 ## Features
 
@@ -41,7 +41,7 @@ SMTP_PASSWORD=YOUR_SMTP_PASSWORD
 ```
 
 ## Setup list of subscribers
-The **recipients.txt** file defines a list of email subscribers. Copy and rename [subscriptions/recipients.txt.example](recipients.txt.example) in **subscriptions** folder as **recipients.txt** and set up your values:
+The **recipients.txt** file defines a list of email subscribers. Copy and rename [recipients.txt.example](subscriptions/recipients.txt.example) in **subscriptions** folder as **recipients.txt** and set up your values:
 
 ```code
 recipient1@example.com  
