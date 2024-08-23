@@ -28,7 +28,7 @@ python setup.py install
 ```
 
 ## Setup env variables
-The .env file is used to store environment variables that the application needs. Copy and rename a .env.example as .env file in the current directory of the project and define values:
+The .env file is used to store environment variables that the application needs. Copy and rename a *.env.example* as *.env* file in the current directory of the project and define values:
 
 ```code
 LLM_CLIENT=YOUR_LLM_CLIENT_MODEL_NAME # examples: accounts/fireworks/models/llama-v3p1-405b-instruct, gpt-4-turbo
