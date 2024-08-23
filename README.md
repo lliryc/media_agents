@@ -41,7 +41,7 @@ SMTP_PASSWORD=YOUR_SMTP_PASSWORD
 ```
 
 ## Setup list of subscribers
-The **recipients.txt** file defines a list of email subscribers. Copy and rename **recipients.txt.example** in **subscriptions** folder and set up your values:
+The **recipients.txt** file defines a list of email subscribers. Copy and rename **recipients.txt.example** in **subscriptions** folder as **recipients.txt** and set up your values:
 
 ```code
 recipient1@example.com  
@@ -56,3 +56,9 @@ python3 app/app.py
 ```
 After that AI assistant will start processing recent updates from CourtListener portal. Usually it takes about 2-3 hours to process recently published legal documents.
 Once all documents was processed, your recepients will get a email with news leads and support materials for news writing.
+
+## Contributing
+Feel free to open issues or submit pull requests if you have suggestions or improvements.
+
+## License
+This project is licensed under the  Apache License (Version 2.0, January 2004) - see the LICENSE file for details.
