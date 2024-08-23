@@ -1,45 +1,27 @@
 # Media Agents
 
-This repository contains a project that processes court opinions to determine their newsworthiness based on several criteria. 
+Media Agents is a Python-based project that implements AI assistant which helps journalists to find news leads and materials for news based on CourtListener online base. This system utilizes natural language processing and a graph-based workflow to find newsworthy stories, extract key facts and references, and compose draft with headline from various opinions and sources.
 
-## Table of Contents
+## Features
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [License](#license)
+- Automated search of newsworthy stories.
+- Building support materials: key facts, key entities (mentioned events & locations, involved people & organizations), references to original legal documents.
+- Updates by email.
 
-## Introduction
+## Prerequisites
 
-The Media Agents project processes court opinion files to evaluate their potential newsworthiness. This is achieved by using intelligent agents empowered with large language models to assess the opinions based on different factors.
+Before using Media Agents, ensure you have the following:
+
+- Python 3.10 or higher installed.
+- Required Python packages (see the Installation section).
+- Set-up env variables
+- Define email recipients' list.
 
 ## Installation
 
-1. Clone the repository:
+Clone the repository:
 
-    ```bash
-    git clone https://github.com/lliryc/media_agents.git
-    cd media_agents
-    ```
-
-2. Create and activate a virtual environment:
-
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
-
-3. Install the required packages:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Optional: Set up your OpenAI API key by creating a `.env` file in the project root directory with the following content:
-
-    ```env
-    OPENAI_API_KEY=your_openai_api_key
-    ```
-
-## License
-
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+```bash
+git clone https://github.com/lliryc/media_agents.git
+cd media_agents
+```
