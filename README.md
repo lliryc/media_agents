@@ -15,7 +15,7 @@ Before using Media Agents, ensure you have the following:
 
 - Python 3.10 or higher installed.
 - **media_agents** package installed (see the [Installation](#Installation) section).
-- Setup env variables
+- Setup env variables.
 - Setup email recipients' list.
 
 ## Installation
