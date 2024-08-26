@@ -6,6 +6,17 @@
 
 Media Agents is a Python-based project that implements Llama-3.1 / GPT4 based LLM assistant which helps journalists to find news leads and materials for news based on [CourtListener](https://www.courtlistener.com/) online base. This system utilizes natural language processing and a graph-based workflow to find newsworthy stories, extract key facts and references, and compose draft with headline from various opinions and sources.
 
+# Contents
+1. [Features](#Features)
+2. [Prerequisites](#Prerequisites)
+3. [Installation](#Installation)
+4. [Setup env variables](#Setup env variables)
+5. [Setup list of subscribers](#Setup list of subscribers)
+6. [Run LLM assistant](#Run LLM assistant)
+7. [Run LLM assistant as a Docker container](#Run LLM assistant as a Docker container)
+8. [Contributing](#Contributing)
+9. [License](#License)
+
 ## Features
 
 - Automated search of newsworthy stories.
