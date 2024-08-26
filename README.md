@@ -1,6 +1,6 @@
 ![Llama in the news room](logo.jpg)
 
-![Static Badge](https://img.shields.io/badge/python-3.10_%7C_3.11-blue)  ![GitHub License](https://img.shields.io/github/license/lliryc/media_agents) https://img.shields.io/badge/version-0.5.2-orange?logo=github
+![Static Badge](https://img.shields.io/badge/python-3.10_%7C_3.11-blue)  ![GitHub License](https://img.shields.io/github/license/lliryc/media_agents) ![Static Badge](https://img.shields.io/badge/version-0.5.2-orange?logo=github)
 
 # Media Agents
 
