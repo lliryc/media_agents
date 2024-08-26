@@ -1,4 +1,7 @@
 ![Llama in the news room](logo.jpg)
+
+![Static Badge](https://img.shields.io/badge/python-3.10_%7C_3.11-blue)  ![GitHub License](https://img.shields.io/github/license/lliryc/media_agents) https://img.shields.io/badge/version-0.5.2-orange?logo=github
+
 # Media Agents
 
 Media Agents is a Python-based project that implements Llama-3.1 / GPT4 based LLM assistant which helps journalists to find news leads and materials for news based on [CourtListener](https://www.courtlistener.com/) online base. This system utilizes natural language processing and a graph-based workflow to find newsworthy stories, extract key facts and references, and compose draft with headline from various opinions and sources.
